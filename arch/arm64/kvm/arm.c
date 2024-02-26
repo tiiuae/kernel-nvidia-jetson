@@ -493,7 +493,7 @@ void kvm_arch_vcpu_postcreate(struct kvm_vcpu *vcpu)
 void kvm_arch_vcpu_destroy(struct kvm_vcpu *vcpu)
 {
 	if (is_protected_kvm_enabled())
-		free_hyp_memcache(&vcpu->arch.stage2_mc, 0);
+		free_hyp_memcache(&vcpu->arch.stage2_mc);
 	else
 		kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_cache);
 
