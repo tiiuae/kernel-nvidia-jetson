@@ -8,7 +8,10 @@ hyp-obj-y := timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o host.o 
 	 serial.o
 hyp-obj-y += ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entry.o \
 	../fpsimd.o ../hyp-entry.o ../exception.o ../pgtable.o
+
 hyp-obj-y += debug/print.o debug/subr_prf.o debug/strlen.o debug/gdb.o
+hyp-obj-y += debug/hyp-dbg.o  debug/parse_attr.o  debug/print_mappings.o
+
 
 hyp-obj-$(CONFIG_TRACING) += clock.o events.o trace.o
 hyp-obj-$(CONFIG_DEBUG_LIST) += list_debug.o

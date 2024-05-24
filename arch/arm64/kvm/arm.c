@@ -1184,6 +1184,9 @@ out:
 int attach_hyp_gdb(u64 param) {
 	return kvm_call_hyp_nvhe(__attach_gdb, param);
 }
+int hyp_dbg(u64 cmd, u64 param1, u64 param2, u64 param3, u64 param4) {
+	return kvm_call_hyp_nvhe(__hyp_dbg, cmd, param1, param2, param3, param4);
+}
 #endif
 
 static int vcpu_interrupt_line(struct kvm_vcpu *vcpu, int number, bool level)

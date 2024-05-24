@@ -102,6 +102,7 @@ enum __kvm_host_smccc_func {
 #endif
 #ifdef CONFIG_KVM_ARM_HYP_DEBUG_HYP_CALLS
 	__KVM_HOST_SMCCC_FUNC___attach_gdb,
+	__KVM_HOST_SMCCC_FUNC___hyp_dbg,
 #endif
 
 	/*

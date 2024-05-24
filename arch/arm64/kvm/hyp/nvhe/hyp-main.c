@@ -1165,12 +1165,27 @@ static void handle___pkvm_iommu_register(struct kvm_cpu_context *host_ctxt)
 }
 #ifdef CONFIG_KVM_ARM_HYP_DEBUG_HYP_CALLS
 int __attach_gdb(u64 param);
+int hyp_dbg(u64 cmd,
+	    u64 param1, u64 param2, u64 param3, u64 param4);
 
 static void handle___attach_gdb(struct kvm_cpu_context *host_ctxt)
 {
 	DECLARE_REG(unsigned long, param, host_ctxt, 1);
 	cpu_reg(host_ctxt, 1) = __attach_gdb(param);
 }
+
+static void handle___hyp_dbg(struct kvm_cpu_context *host_ctxt)
+{
+	DECLARE_REG(u64, cmd, host_ctxt, 1);
+	DECLARE_REG(u64, prm1, host_ctxt, 2);
+	DECLARE_REG(u64, prm2, host_ctxt, 3);
+	DECLARE_REG(u64, prm3, host_ctxt, 4);
+	DECLARE_REG(u64, prm4, host_ctxt, 5);
+
+	cpu_reg(host_ctxt, 1) = hyp_dbg(cmd, prm1, prm2, prm3, prm4);
+}
+
+
 #endif
 
 static void handle___pkvm_iommu_pm_notify(struct kvm_cpu_context *host_ctxt)
@@ -1336,6 +1351,8 @@ static const hcall_t host_hcall[] = {
 #endif
 #ifdef CONFIG_KVM_ARM_HYP_DEBUG_HYP_CALLS
 	HANDLE_FUNC(__attach_gdb),
+	HANDLE_FUNC(__hyp_dbg),
+
 #endif
 };
 

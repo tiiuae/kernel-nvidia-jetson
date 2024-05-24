@@ -38,6 +38,9 @@ hyp_vsnprintf(char *str, size_t size, const char *format, va_list ap);
 #define PRINT_BUFFER_SIZE 128
 #include <asm/kvm_mmu.h>
 #include "debug-pl011.h"
+#include <hyp/hyp_print.h>
+
+struct dgb_buf *dbg_buffer = 0;
 
 int hyp_print(const char *fmt, ...)
 {
@@ -62,14 +65,47 @@ int hyp_print(const char *fmt, ...)
 
 int hyp_snprint(char *s, size_t slen, const char *format, ...)
 {
-	int retval;
 	va_list ap;
+	int ret;
 
 	va_start(ap, format);
-	retval = hyp_vsnprintf(s, slen, format, ap);
+	ret = hyp_vsnprintf(s, slen, format, ap);
 	va_end(ap);
-	return retval;
+	return ret;
 }
+
+int hyp_dbg_print(const char *fmt, ...)
+{
+	va_list args;
+	char buf[PRINT_BUFFER_SIZE];
+	int count;
+	int maxlen;
+	if (dbg_buffer) {
+		if (dbg_buffer->datalen > dbg_buffer->size)
+			return 0;
+		maxlen = dbg_buffer->size - dbg_buffer->datalen;
+		va_start(args, fmt);
+		count = hyp_vsnprintf(&dbg_buffer->data[dbg_buffer->datalen], maxlen, fmt, args);
+		va_end(args);
+		dbg_buffer->datalen += count;
+	} else {
+		va_start(args, fmt);
+		hyp_vsnprintf(buf, sizeof(buf) - 1, fmt, args);
+		va_end(args);
+		/* Use putchar directly as 'puts()' adds a newline. */
+		buf[PRINT_BUFFER_SIZE - 1] = '\0';
+		count = 0;
+		while (buf[count]) {
+			hyp_putc(buf[count]);
+			count++;
+		}
+	}
+	return count;
+}
+
+
+
+
 #else
 
 int hyp_print(const char *fmt, ...) { return 0; }
