@@ -37,6 +37,21 @@ static void *ffa_proxy_pages;
 static struct kvm_pgtable_mm_ops pkvm_pgtable_mm_ops;
 static struct hyp_pool hpool;
 
+#ifdef CONFIG_KVM_ARM_HYP_DEBUG_UART
+unsigned long arm64_kvm_hyp_debug_uart_addr;
+static int pre_create_hyp_debug_uart_mapping(void)
+{
+	phys_addr_t base = CONFIG_KVM_ARM_HYP_DEBUG_UART_ADDR;
+
+	if (__pkvm_create_private_mapping(base, PAGE_SIZE,
+					  PAGE_HYP_DEVICE,
+					  &arm64_kvm_hyp_debug_uart_addr))
+		return -1;
+
+	return 0;
+}
+#endif
+
 static int divide_memory_pool(void *virt, unsigned long size)
 {
 	unsigned long nr_pages;
@@ -197,6 +212,12 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
 	ret = pkvm_create_mappings(start, end, prot);
 	if (ret)
 		return ret;
+
+#ifdef CONFIG_KVM_ARM_HYP_DEBUG_UART
+	ret = pre_create_hyp_debug_uart_mapping();
+	if (ret)
+		return ret;
+#endif
 
 	return 0;
 }
