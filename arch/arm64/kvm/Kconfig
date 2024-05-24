@@ -83,4 +83,10 @@ config KVM_ARM_HYP_DEBUG_UART_ADDR
 	hex "Physical address of the PL011 for EL2 to use"
 	depends on KVM_ARM_HYP_DEBUG_UART
 	default 0x0900000
+
+config KVM_ARM_HYP_DEBUG_HYP_CALLS
+	bool "Enables debugging hyp-calls"
+	depends on KVM
+	default n
+
 endif # VIRTUALIZATION

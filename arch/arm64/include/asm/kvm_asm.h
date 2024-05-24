@@ -100,6 +100,9 @@ enum __kvm_host_smccc_func {
 #ifdef CONFIG_ANDROID_ARM64_WORKAROUND_DMA_BEYOND_POC
 	__KVM_HOST_SMCCC_FUNC___pkvm_host_set_stage2_memattr,
 #endif
+#ifdef CONFIG_KVM_ARM_HYP_DEBUG_HYP_CALLS
+	__KVM_HOST_SMCCC_FUNC___attach_gdb,
+#endif
 
 	/*
 	 * Start of the dynamically registered hypercalls. Start a bit
