@@ -86,7 +86,7 @@ config KVM_ARM_HYP_DEBUG_UART_ADDR
 
 config KVM_ARM_HYP_DEBUG_HYP_CALLS
 	bool "Enables debugging hyp-calls"
-	depends on KVM
+	depends on KVM_ARM_HYP_DEBUG_UART
 	default n
 
 endif # VIRTUALIZATION

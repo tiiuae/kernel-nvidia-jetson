@@ -81,7 +81,7 @@ int hyp_dbg_print(const char *fmt, ...)
 	int count;
 	int maxlen;
 	if (dbg_buffer) {
-		if (dbg_buffer->datalen > dbg_buffer->size)
+		if (dbg_buffer->datalen >= dbg_buffer->size)
 			return 0;
 		maxlen = dbg_buffer->size - dbg_buffer->datalen;
 		va_start(args, fmt);
