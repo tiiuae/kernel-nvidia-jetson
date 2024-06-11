@@ -21,6 +21,9 @@
 #include <nvhe/serial.h>
 #include <nvhe/trap_handler.h>
 
+#include <hyp/hyp_print.h>
+#include <nvhe/dump_regs.h>
+
 unsigned long hyp_nr_cpus;
 
 phys_addr_t pvmfw_base;
@@ -438,6 +441,8 @@ void __noreturn __pkvm_init_finalise(void)
 		goto out;
 
 	pkvm_hyp_vm_table_init(vm_table_base);
+
+	debug_dump_csrs();
 out:
 	/*
 	 * We tail-called to here from handle___pkvm_init() and will not return,
