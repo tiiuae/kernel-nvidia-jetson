@@ -1180,6 +1180,12 @@ out:
 	vcpu_put(vcpu);
 	return ret;
 }
+#ifdef CONFIG_KVM_ARM_HYP_DEBUG_GDB_SYMBOLS
+int attach_hyp_gdb(u64 param)
+{
+	return kvm_call_hyp_nvhe(__attach_gdb, param);
+}
+#endif
 
 static int vcpu_interrupt_line(struct kvm_vcpu *vcpu, int number, bool level)
 {

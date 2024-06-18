@@ -88,7 +88,13 @@ config KVM_ARM_HYP_DEBUG_UART_ADDR
 	hex "Physical address of the PL011 for EL2 to use"
 	depends on KVM_ARM_HYP_DEBUG_UART
 	default 0x0900000
-	help
-	  Physical address of UART in the host.
 
+config KVM_ARM_HYP_DEBUG_GDB_SYMBOLS
+	bool "Enables symbols for gdb in EL2"
+	depends on KVM_ARM_HYP_DEBUG_UART
+	default n
+	help
+	  Say Y here to enable loading symbols for gdb onEL2.
+
+	  if unsure, say N.
 endif # VIRTUALIZATION
