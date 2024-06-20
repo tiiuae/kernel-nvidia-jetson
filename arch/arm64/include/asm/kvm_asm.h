@@ -103,6 +103,9 @@ enum __kvm_host_smccc_func {
 #ifdef CONFIG_KVM_ARM_HYP_DEBUG_GDB_SYMBOLS
 	__KVM_HOST_SMCCC_FUNC___attach_gdb,
 #endif
+#ifdef CONFIG_KVM_ARM_HYP_DEBUG_HYP_CALLS
+	__KVM_HOST_SMCCC_FUNC___hyp_dbg,
+#endif
 
 	/*
 	 * Start of the dynamically registered hypercalls. Start a bit

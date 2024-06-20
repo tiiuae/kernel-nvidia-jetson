@@ -14,6 +14,9 @@ endif
 ifeq ($(CONFIG_KVM_ARM_HYP_DEBUG_GDB_SYMBOLS),y)
 hyp-obj-y += debug/gdb.o
 endif
+ifeq ($(CONFIG_KVM_ARM_HYP_DEBUG_HYP_CALLS),y)
+hyp-obj-y += debug/hyp-dbg.o debug/parse_attr.o  debug/print_mappings.o debug/count_shared.o
+endif
 
 hyp-obj-$(CONFIG_TRACING) += clock.o events.o trace.o
 hyp-obj-$(CONFIG_DEBUG_LIST) += list_debug.o

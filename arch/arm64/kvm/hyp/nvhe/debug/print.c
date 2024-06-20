@@ -31,6 +31,8 @@
 #ifdef CONFIG_KVM_ARM_HYP_DEBUG_UART
 #include <linux/kernel.h>
 #include <hyp/hyp_print.h>
+#include <hyp/hyp_debug.h>
+
 #include <asm/kvm_mmu.h>
 #define HYP_PL011_BASE_PHYS	CONFIG_KVM_ARM_HYP_DEBUG_UART_ADDR
 #define HYP_PL011_UARTFR	0x18
@@ -114,6 +116,40 @@ int hyp_snprint(char *s, size_t slen, const char *format, ...)
 	va_end(ap);
 	return retval;
 }
+#ifdef CONFIG_KVM_ARM_HYP_DEBUG_HYP_CALLS
+int hyp_dbg_print(const char *fmt, ...)
+{
+	va_list args;
+	char buf[PRINT_BUFFER_SIZE];
+	int count;
+	int maxlen;
+
+	if (dbg_buffer) {
+		if (dbg_buffer->datalen >= dbg_buffer->size)
+			return 0;
+		maxlen = dbg_buffer->size - dbg_buffer->datalen;
+		va_start(args, fmt);
+		count = hyp_vsnprintf(&dbg_buffer->data[dbg_buffer->datalen], maxlen, fmt, args);
+		va_end(args);
+		dbg_buffer->datalen += count;
+	} else {
+		va_start(args, fmt);
+		hyp_vsnprintf(buf, sizeof(buf) - 1, fmt, args);
+		va_end(args);
+		/* Use putchar directly as 'puts()' adds a newline. */
+		buf[PRINT_BUFFER_SIZE - 1] = '\0';
+		count = 0;
+		while (buf[count]) {
+			hyp_putc(buf[count]);
+			count++;
+		}
+	}
+	return count;
+}
+#endif
+
+
+
 #else
 
 int hyp_print(const char *fmt, ...) { return 0; }

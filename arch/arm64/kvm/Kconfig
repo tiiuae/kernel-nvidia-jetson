@@ -97,4 +97,14 @@ config KVM_ARM_HYP_DEBUG_GDB_SYMBOLS
 	  Say Y here to enable loading symbols for gdb onEL2.
 
 	  if unsure, say N.
+
+config KVM_ARM_HYP_DEBUG_HYP_CALLS
+	bool "Enables debugging calls to EL2"
+	depends on KVM
+	default n
+	help
+	  Say Y here to enable debugging calls from EL1 to EL2.
+
+	  if unsure, say N.
+
 endif # VIRTUALIZATION
