@@ -2,6 +2,7 @@
 
 #include <linux/kernel.h>
 #include <nvhe/mem_protect.h>
+#include <nvhe/ramlog.h>
 #include <hyp/hyp_print.h>
 #include <hyp/hyp_debug.h>
 
@@ -57,6 +58,8 @@ int hyp_dbg(u64 cmd, u64 param1, u64 param2, u64 param3, u64 param4)
 	case 3:
 		count_shared(param1, param2, param3);
 		break;
+	case 4:
+		output_rlog(param1);
 	}
 
 	return 0;

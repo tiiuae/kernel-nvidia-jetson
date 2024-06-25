@@ -107,4 +107,25 @@ config KVM_ARM_HYP_DEBUG_HYP_CALLS
 
 	  if unsure, say N.
 
+config KVM_ARM_HYP_DEBUG_RAMLOG
+	bool "Presense of a hypervisor ramlog"
+	depends on KVM_ARM_HYP_DEBUG_UART
+	default n
+	help
+		Hypervisor ramlog collects register dumps and other data separately from
+		a kernel log. Hypervisor log is encrypted with a chacha20 cipher.
+
+		if unsure, say N.
+
+config KVM_ARM_HYP_DEBUG_RAMLOG_DIRECT_PRINT
+	bool "Print hyp log messages to console output"
+	depends on KVM_ARM_HYP_DEBUG_RAMLOG
+	default n
+	help
+		For debug purposes it is convenient to read the log instantly
+		in console, the option just enables additional output and does not
+		reject storing and encrypting the log
+
+		if unsure, say N.
+
 endif # VIRTUALIZATION

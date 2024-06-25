@@ -21,6 +21,9 @@ endif
 hyp-obj-$(CONFIG_TRACING) += clock.o events.o trace.o
 hyp-obj-$(CONFIG_DEBUG_LIST) += list_debug.o
 hyp-obj-$(CONFIG_MODULES) += modules.o
+hyp-obj-$(CONFIG_KVM_ARM_HYP_DEBUG_RAMLOG) += debug/dump_regs.o \
+											 crypto/chacha.o \
+											 ramlog.o
 hyp-obj-y += $(lib-objs)
 
 $(obj)/hyp.lds: $(src)/hyp.lds.S FORCE
