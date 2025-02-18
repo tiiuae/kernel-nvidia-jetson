@@ -19,6 +19,12 @@ enum pkvm_psci_notification {
 	PKVM_PSCI_CPU_ENTRY,
 };
 
+#ifdef CONFIG_PKVM_VENDOR_MODULE_OPS
+enum pkvm_vendor_modules {
+	PKVM_DBG_TOOLS,
+};
+#endif
+
 /**
  * struct pkvm_module_ops - pKVM modules callbacks
  * @create_private_mapping:	Map a memory region into the hypervisor private
@@ -159,6 +165,7 @@ enum pkvm_psci_notification {
  * @iommu_donate_pages_atomic:	Allocate memory from IOMMU identity pool.
  * @iommu_reclaim_pages_atomic:	Reclaim memory from iommu_donate_pages_atomic()
  * @hyp_smp_processor_id:	Current CPU id
+ * @get_vendor_ops:		Get vendor specific ops-structure
  */
 struct pkvm_module_ops {
 	int (*create_private_mapping)(phys_addr_t phys, size_t size,
@@ -225,6 +232,9 @@ struct pkvm_module_ops {
 	void (*iommu_flush_unmap_cache)(struct kvm_iommu_paddr_cache *cache);
 	int (*host_stage2_enable_lazy_pte)(u64 addr, u64 nr_pages);
 	int (*host_stage2_disable_lazy_pte)(u64 addr, u64 nr_pages);
+#ifdef CONFIG_PKVM_VENDOR_MODULE_OPS
+	void* (*get_vendor_ops)(enum pkvm_vendor_modules vendor);
+#endif
 };
 
 int __pkvm_load_el2_module(struct module *this, unsigned long *token);

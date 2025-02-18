@@ -92,4 +92,17 @@ config PTDUMP_STAGE2_DEBUGFS
 
          If in doubt, say N.
 
+config PKVM_VENDOR_MODULE_OPS
+	bool "Allow vendor specific pkmv module operations"
+	depends on KVM
+	default n
+	help
+	  Say Y here if you want to allow vendor specific operations for pkvm modules
+	  Unlike the kernel, no symbol is exported and all calls to the hypervisor
+	  must happen through the callbacks in the struct pkvm_module_ops.
+	  This structure is quite limited and the purpose of vendor-specific ops
+	  is to extend it with hypervisor services that the vendor needs.
+
+	  If in doubt, say N.
+
 endif # VIRTUALIZATION
