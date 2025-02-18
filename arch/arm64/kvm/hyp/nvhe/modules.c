@@ -14,6 +14,8 @@
 #include <nvhe/spinlock.h>
 #include <nvhe/trace/trace.h>
 #include <nvhe/trap_handler.h>
+#include <nvhe/pkvm.h>
+#include <nvhe/dbg_tool_mod.h>
 
 static void *__pkvm_module_memcpy(void *to, const void *from, size_t count)
 {
@@ -105,6 +107,29 @@ static int host_stage2_disable_lazy_pte(u64 pfn, u64 nr_pages)
 	return __pkvm_host_lazy_pte(pfn, nr_pages, false);
 }
 
+#ifdef CONFIG_PKVM_VENDOR_MODULE_OPS
+int __pkvm_register_hyp_print_function(int (*cb)(const char *fmt, ...));
+
+struct dbg_tool_ops dbg_ops = {
+	.pkvm_get_hyp_vm = pkvm_get_hyp_vm,
+	.pkvm_put_hyp_vm = pkvm_put_hyp_vm,
+	.kvm_pgtable_walk = kvm_pgtable_walk,
+	.host_mmu = &host_mmu,
+	.pkvm_pgtable = &pkvm_pgtable,
+	.register_hyp_print = __pkvm_register_hyp_print_function,
+
+};
+
+void  *_get_vendor_ops(enum pkvm_vendor_modules vendor)
+{
+	switch (vendor) {
+	case PKVM_DBG_TOOLS:
+		return &dbg_ops;
+	}
+	return 0;
+}
+#endif
+
 const struct pkvm_module_ops module_ops = {
 	.create_private_mapping = __pkvm_create_private_mapping,
 	.alloc_module_va = __pkvm_alloc_module_va,
@@ -165,6 +190,9 @@ const struct pkvm_module_ops module_ops = {
 	.iommu_flush_unmap_cache = kvm_iommu_flush_unmap_cache,
 	.host_stage2_enable_lazy_pte = host_stage2_enable_lazy_pte,
 	.host_stage2_disable_lazy_pte = host_stage2_disable_lazy_pte,
+#ifdef CONFIG_PKVM_VENDOR_MODULE_OPS
+	.get_vendor_ops = _get_vendor_ops,
+#endif
 };
 
 int __pkvm_init_module(void *module_init)

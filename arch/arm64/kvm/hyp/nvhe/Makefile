@@ -12,6 +12,7 @@ hyp-obj-y += ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entry.o \
 hyp-obj-$(CONFIG_LIST_HARDENED) += list_debug.o
 hyp-obj-$(CONFIG_TRACING) += clock.o events.o trace.o
 hyp-obj-$(CONFIG_MODULES) += modules.o
+hyp-obj-$(CONFIG_PKVM_VENDOR_MODULE_OPS) += module_dbg_tools.o
 hyp-obj-y += $(lib-objs)
 
 #Only for built-in, not modules

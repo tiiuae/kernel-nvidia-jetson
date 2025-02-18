@@ -726,7 +726,16 @@ static int __init __pkvm_request_early_module(char *module_name,
 	argv[idx++] = modprobe_path;
 	argv[idx++] = "-q";
 	if (*module_path != '\0') {
+#ifdef CONFIG_PKVM_VENDOR_MODULE_OPS
+		/* initramfs is made for a specific kernel version.
+		 * Modprobe does not need to check the kernel version anymore.
+		 * instead, modprobe fetches the modules from the path:
+		 * /lib/modules/<module_path>
+		 */
+		argv[idx++] = "-S";
+#else
 		argv[idx++] = "-d";
+#endif
 		argv[idx++] = module_path;
 	}
 	argv[idx++] = "--";
