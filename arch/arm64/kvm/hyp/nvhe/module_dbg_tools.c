@@ -9,12 +9,12 @@
 
 #include <nvhe/module_dbg_tools.h>
 
-static int (*__hyp_print)(const char *fmt, ...);
+static int (*__hyp_vprint)(const char *format, va_list va);
 
 static inline bool hyp_print_enabled(void)
 {
-	/* Paired with __pkvm_register_hyp_print_function()'s cmpxchg */
-	return !!smp_load_acquire(&__hyp_print);
+	/* Paired with __pkvm_register_hyp_vprint_function()'s cmpxchg */
+	return !!smp_load_acquire(&__hyp_vprint);
 }
 
 int hyp_print(const char *fmt, ...)
@@ -24,13 +24,13 @@ int hyp_print(const char *fmt, ...)
 
 	if (hyp_print_enabled()) {
 		va_start(args, fmt);
-		ret = __hyp_print(fmt, args);
+		ret = __hyp_vprint(fmt, args);
 		va_end(args);
 	}
 	return ret;
 }
 
-int __pkvm_register_hyp_print_function(int (*cb)(const char *fmt, ...))
+int __pkvm_register_hyp_vprint_function(int (*cb)(const char *format, va_list va))
 {
 	int r = 0;
 
@@ -39,7 +39,7 @@ int __pkvm_register_hyp_print_function(int (*cb)(const char *fmt, ...))
 	 * Ensure memory stores hapenning during a pKVM
 	 * module init are observed before executing the callback.
 	 */
-	r = cmpxchg_release(&__hyp_print, NULL, cb) ? -EBUSY : 0;
+	r = cmpxchg_release(&__hyp_vprint, NULL, cb) ? -EBUSY : 0;
 	return r;
 }
 
@@ -49,5 +49,5 @@ struct dbg_tool_ops hyp_dbg_tools_ops = {
 	.kvm_pgtable_walk = kvm_pgtable_walk,
 	.host_mmu = &host_mmu,
 	.pkvm_pgtable = &pkvm_pgtable,
-	.register_hyp_print = __pkvm_register_hyp_print_function,
+	.register_hyp_vprint = __pkvm_register_hyp_vprint_function,
 };

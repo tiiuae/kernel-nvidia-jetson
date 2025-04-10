@@ -10,7 +10,7 @@ struct dbg_tool_ops {
 			     struct kvm_pgtable_walker *walker);
 	struct host_mmu *host_mmu;
 	struct kvm_pgtable *pkvm_pgtable;
-	int (*register_hyp_print)(int (*hyp_print_cb)(const char *fmt, ...));
+	int (*register_hyp_vprint)(int (*hyp_vprint_cb)(const char *format, va_list ap));
 };
 
 extern struct dbg_tool_ops hyp_dbg_tools_ops;
