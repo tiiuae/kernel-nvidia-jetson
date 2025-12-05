@@ -13,6 +13,7 @@ hyp-obj-$(CONFIG_LIST_HARDENED) += list_debug.o
 hyp-obj-$(CONFIG_TRACING) += clock.o events.o trace.o
 hyp-obj-$(CONFIG_MODULES) += modules.o
 hyp-obj-$(CONFIG_PKVM_VENDOR_MODULE_OPS) += module_dbg_tools.o
+hyp-obj-$(CONFIG_PKVM_GUEST_TO_GUEST_SHARE) += pkvm_g2g_share.o
 hyp-obj-y += $(lib-objs)
 
 #Only for built-in, not modules

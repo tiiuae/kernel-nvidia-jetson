@@ -105,4 +105,17 @@ config PKVM_VENDOR_MODULE_OPS
 
 	  If in doubt, say N.
 
+config PKVM_GUEST_TO_GUEST_SHARE
+	bool "Allows guests to share memory with each other"
+	depends on KVM
+	depends on ARM64
+	default n
+	help
+	  Say Y here if you want to allow guests to share memory with each other.
+	  Pkvm can give guests memory to share from a memory area allocated from
+	  the host.
+	  The itself host cannot access to  this area.
+
+	  If in doubt, say N.
+
 endif # VIRTUALIZATION

@@ -200,6 +200,11 @@ static inline int pkvm_init_power_domain(struct kvm_power_domain *pd,
 	}
 }
 
+unsigned int vm_handle_to_idx(pkvm_handle_t handle);
+pkvm_handle_t idx_to_vm_handle(unsigned int idx);
+struct pkvm_hyp_vm *get_vm_by_handle(pkvm_handle_t handle);
+int pkvm_handle_empty_memcache(struct pkvm_hyp_vcpu *hyp_vcpu, u64 *exit_code);
+
 #ifdef CONFIG_NVHE_EL2_DEBUG
 int pkvm_stage2_snapshot_by_handle(struct kvm_pgtable_snapshot *snap,
 				   pkvm_handle_t handle);

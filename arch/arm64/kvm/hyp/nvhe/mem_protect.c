@@ -49,13 +49,13 @@ static struct kvm_pgtable_pte_ops guest_s2_pte_ops = {
 	.pte_is_counted_cb = guest_stage2_pte_is_counted
 };
 
-static void guest_lock_component(struct pkvm_hyp_vm *vm)
+void guest_lock_component(struct pkvm_hyp_vm *vm)
 {
 	hyp_spin_lock(&vm->pgtable_lock);
 	current_vm = vm;
 }
 
-static void guest_unlock_component(struct pkvm_hyp_vm *vm)
+void guest_unlock_component(struct pkvm_hyp_vm *vm)
 {
 	current_vm = NULL;
 	hyp_spin_unlock(&vm->pgtable_lock);

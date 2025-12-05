@@ -501,7 +501,10 @@ extern unsigned int kvm_nvhe_sym(hyp_memblock_nr);
 
 extern phys_addr_t kvm_nvhe_sym(pvmfw_base);
 extern phys_addr_t kvm_nvhe_sym(pvmfw_size);
-
+#ifdef CONFIG_PKVM_GUEST_TO_GUEST_SHARE
+extern phys_addr_t kvm_nvhe_sym(g2g_share_base);
+extern phys_addr_t kvm_nvhe_sym(g2g_share_size);
+#endif
 static inline unsigned long
 hyp_vmemmap_memblock_size(struct memblock_region *reg, size_t vmemmap_entry_size)
 {
