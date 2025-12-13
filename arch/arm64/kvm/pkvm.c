@@ -538,7 +538,11 @@ static int __init finalize_pkvm(void)
 	ret = kvm_iommu_init_driver();
 	if (ret) {
 		pr_err("Failed to init KVM IOMMU driver: %d\n", ret);
-		pkvm_firmware_rmem_clear();
+		/* The following line must be commented out if pvmfw is used
+		 * and the SMMU driver is not implemented.
+		 * Otherwise pvmfw-loader will be deleted because SMMU init fails.
+		 */
+		//pkvm_firmware_rmem_clear();
 	}
 
 	/*
